@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "mandelbrot-ng"
+    }
+  },
+  "defaultProject": "mandelbrot-ng",
+  "cli": {
+    "analytics": false
+  }
 }
