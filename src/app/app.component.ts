@@ -17,6 +17,10 @@ export class AppComponent {
     this.ctx = this.canvas.nativeElement.getContext('2d');
   }
 
+  clear() {
+    this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+  }
+
   draw(): void {
     this.ctx.fillStyle = 'red';
     const px = new Pixel(this.ctx);
