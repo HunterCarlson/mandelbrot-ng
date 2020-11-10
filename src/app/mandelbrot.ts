@@ -6,34 +6,43 @@ export class Mandelbrot {
   maxX = 2;
   minY = -2;
   maxY = 2;
-  maxAbs = 2;
-
-  maxIterations = 10;
+  maxR = 2;
 
   numericWidth = this.maxX - this.minX;
   numericHeight = this.maxY - this.minY;
 
-  escapeValues: [number][number];
+  escapeValues: number[][] = [];
 
-  generate(pxSize: number) {
+  public generate(pxSize: number, maxIterations: number): number[][] {
     const deltaX = this.numericWidth / pxSize;
     const deltaY = this.numericHeight / pxSize;
 
     for (let i = 0; i < pxSize; i++) {
+      this.escapeValues[i] = [];
       const re = this.minX + i * deltaX;
       for (let j = 0; j < pxSize; j++) {
         const im = this.minY + j * deltaY;
-
-        let z: Complex = math.complex(re, im);
-        const iterations = this.iterateZ(z);
+        let c: Complex = math.complex(re, im);
+        const iterations = this.iterateZ(c, maxIterations);
         this.escapeValues[i][j] = iterations;
       }
     }
+    return this.escapeValues;
   }
 
-  iterateZ(z: Complex): number {
+  iterateZ(c: Complex, maxIterations: number): number {
     let iterations = 0;
+    let z = math.complex(0, 0);
     // iterate until escape or limit reached
+    while (iterations < maxIterations) {
+      let z2 = math.add(math.square(z), c) as Complex;
+      const r = z2.toPolar().r;
+      if (r > this.maxR) {
+        break;
+      }
+      z = z2;
+      iterations++;
+    }
     return iterations;
   }
 }
