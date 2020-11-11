@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Mandelbrot } from './mandelbrot';
 import { Pixel } from './pixel';
+import * as convert from 'color-convert';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +27,7 @@ export class AppComponent {
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
   }
 
-  draw(): void {
+  drawBlackAndWhite(): void {
     const px = new Pixel(this.ctx);
     const pixels = this.mandelbrot.generate(this.size, this.maxIterations);
 
@@ -40,5 +41,29 @@ export class AppComponent {
         px.drawPixel(i, j);
       }
     }
+  }
+
+  drawColor(): void {
+    const px = new Pixel(this.ctx);
+    const pixels = this.mandelbrot.generate(this.size, this.maxIterations);
+
+    for (let i = 0; i < this.size; i++) {
+      for (let j = 0; j < this.size; j++) {
+        if (pixels[i][j] == this.maxIterations || pixels[i][j] == 0) {
+          this.ctx.fillStyle = 'black';
+        } else {
+          this.ctx.fillStyle = this.mapIterationToRgb(pixels[i][j]);
+        }
+        px.drawPixel(i, j);
+      }
+    }
+  }
+
+  // TODO: move this to a Dict so we don't have to recalculate each time
+  mapIterationToRgb(i: number): string {
+    const hueStep = 360 / this.maxIterations;
+    const hue = hueStep * i;
+    const colorHex = convert.hsl.hex([hue, 100, 50]);
+    return `#${colorHex}`;
   }
 }
