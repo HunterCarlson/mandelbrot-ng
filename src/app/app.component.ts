@@ -19,11 +19,14 @@ export class AppComponent {
   hueStep = 36;
 
   private mandelbrot = new Mandelbrot();
-
   private ctx: CanvasRenderingContext2D;
+  private px: Pixel;
+  private pixels: number[][];
 
   ngOnInit(): void {
     this.ctx = this.canvas.nativeElement.getContext('2d');
+    this.px = new Pixel(this.ctx);
+    this.pixels = this.mandelbrot.generate(this.size, this.maxIterations);
   }
 
   clear() {
@@ -31,41 +34,32 @@ export class AppComponent {
   }
 
   drawBlackAndWhite(): void {
-    const px = new Pixel(this.ctx);
-    const pixels = this.mandelbrot.generate(this.size, this.maxIterations);
-
     for (let i = 0; i < this.size; i++) {
       for (let j = 0; j < this.size; j++) {
-        if (pixels[i][j] < this.maxIterations) {
+        if (this.pixels[i][j] < this.maxIterations) {
           this.ctx.fillStyle = 'black';
         } else {
           this.ctx.fillStyle = 'white';
         }
-        px.drawPixel(i, j);
+        this.px.drawPixel(i, j);
       }
     }
   }
 
   drawColor(): void {
-    const px = new Pixel(this.ctx);
-    const pixels = this.mandelbrot.generate(this.size, this.maxIterations);
-
     for (let i = 0; i < this.size; i++) {
       for (let j = 0; j < this.size; j++) {
-        if (pixels[i][j] == this.maxIterations || pixels[i][j] == 0) {
+        if (this.pixels[i][j] == this.maxIterations || this.pixels[i][j] == 0) {
           this.ctx.fillStyle = 'black';
         } else {
-          this.ctx.fillStyle = this.mapIterationToRgbHex(pixels[i][j]);
+          this.ctx.fillStyle = this.mapIterationToRgbHex(this.pixels[i][j]);
         }
-        px.drawPixel(i, j);
+        this.px.drawPixel(i, j);
       }
     }
   }
 
   drawImageBuffer(): void {
-    const px = new Pixel(this.ctx);
-    const pixels = this.mandelbrot.generate(this.size, this.maxIterations);
-
     // Get copy of actual imagedata (for the whole canvas area)
     const imageData = this.ctx.getImageData(0, 0, this.size, this.size);
     // Create a buffer that's the same size as our canvas image data
@@ -79,10 +73,10 @@ export class AppComponent {
       const yw = y * this.size;
       for (let x = 0; x < this.size; x++) {
         let color: RGB;
-        if (pixels[x][y] == this.maxIterations || pixels[x][y] == 0) {
+        if (this.pixels[x][y] == this.maxIterations || this.pixels[x][y] == 0) {
           color = convert.hex.rgb('#000000');
         } else {
-          color = this.mapIterationToRgb(pixels[x][y]);
+          color = this.mapIterationToRgb(this.pixels[x][y]);
         }
         // RGBA stored in a 32bit uint
         buf32[yw + x] =
