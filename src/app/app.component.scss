@@ -13,18 +13,28 @@ canvas {
 }
 
 .buttons {
-  padding: 0.5em 2em 0 0;
+  padding: 0.5em 1em 0 0;
 }
 
 button {
   margin: 0.5em 1em;
 }
 
-.hue-step {
+.hue {
   display: flex;
   flex-direction: column;
 }
 
-.flex-center {
-  align-self: center;
+.hue-step {
+  display: flex;
+  padding: 0.5em 0 0 0;
+}
+
+.hue-offset {
+  display: flex;
+  padding: 0.5em 0 0 0;
+}
+
+.flex-baseline {
+  align-self: baseline;
 }

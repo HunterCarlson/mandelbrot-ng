@@ -21,20 +21,44 @@
         <button mat-raised-button (click)="clear()">Clear</button>
       </div>
     </div>
-    <div class="hue-step">
-      <div class="flex-center">
-        <mat-slider
-          min="1"
-          max="50"
-          step="0.1"
-          value="36"
-          style="width: 400px"
-          [(ngModel)]="hueStep"
-          (change)="drawImageBuffer()"
-        ></mat-slider>
+    <div class="hue">
+      <div class="hue-step">
+        <div class="flex-baseline">
+          <mat-slider
+            min="1"
+            max="50"
+            step="0.1"
+            value="36"
+            style="width: 400px; margin-right: 1em"
+            [(ngModel)]="hueStep"
+            (change)="drawImageBuffer()"
+          ></mat-slider>
+        </div>
+        <div class="flex-baseline">
+          <mat-form-field style="width: 6em">
+            <mat-label>Hue Step</mat-label>
+            <input matInput type="number" [(ngModel)]="hueStep" />
+          </mat-form-field>
+        </div>
       </div>
-      <div class="flex-center">
-        <input matInput type="number" [(ngModel)]="hueStep" />
+      <div class="hue-offset">
+        <div class="flex-baseline">
+          <mat-slider
+            min="0"
+            max="360"
+            step="1"
+            value="0"
+            style="width: 400px; margin-right: 1em"
+            [(ngModel)]="hueOffset"
+            (change)="drawImageBuffer()"
+          ></mat-slider>
+        </div>
+        <div class="flex-baseline">
+          <mat-form-field style="width: 6em">
+            <mat-label>Hue Offset</mat-label>
+            <input matInput type="number" [(ngModel)]="hueOffset" />
+          </mat-form-field>
+        </div>
       </div>
     </div>
   </div>

@@ -17,6 +17,7 @@ export class AppComponent {
   size = 800;
   maxIterations = 100;
   hueStep: number = 36;
+  hueOffset: number = 0;
 
   private mandelbrot = new Mandelbrot();
   private ctx: CanvasRenderingContext2D;
@@ -94,14 +95,14 @@ export class AppComponent {
 
   // TODO: move this to a Dict so we don't have to recalculate each time
   mapIterationToRgbHex(i: number): string {
-    const hue = this.hueStep * (i - 1);
-    const colorHex = convert.hsl.hex([hue, 100, 50]);
+    const hue = this.hueStep * (i - 1) + this.hueOffset;
+    const colorHex = convert.hsl.hex([hue % 360, 100, 50]);
     return `#${colorHex}`;
   }
 
   mapIterationToRgb(i: number): RGB {
-    const hue = this.hueStep * (i - 1);
-    const colorRgb = convert.hsl.rgb([hue, 100, 50]);
+    const hue = this.hueStep * (i - 1) + this.hueOffset;
+    const colorRgb = convert.hsl.rgb([hue % 360, 100, 50]);
     return colorRgb;
   }
 }
