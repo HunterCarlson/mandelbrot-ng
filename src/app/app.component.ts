@@ -16,7 +16,7 @@ export class AppComponent {
   title = 'mandelbrot-ng';
   size = 800;
   maxIterations = 100;
-  hueStep = 36;
+  hueStep: number = 36;
 
   private mandelbrot = new Mandelbrot();
   private ctx: CanvasRenderingContext2D;
