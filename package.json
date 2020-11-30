@@ -24,6 +24,7 @@
     "@angular/router": "^11.0.0",
     "@types/color-convert": "^1.9.0",
     "@types/mathjs": "^6.0.7",
+    "angular-resize-event": "^2.0.1",
     "color-convert": "^2.0.1",
     "mathjs": "^8.0.1",
     "rxjs": "~6.6.0",

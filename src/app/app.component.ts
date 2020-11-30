@@ -4,6 +4,7 @@ import { Pixel } from './pixel';
 import * as convert from 'color-convert';
 import { rgb } from 'color-convert/route';
 import { RGB } from 'color-convert/conversions';
+import { ResizedEvent } from 'angular-resize-event';
 
 @Component({
   selector: 'app-root',
@@ -13,9 +14,9 @@ import { RGB } from 'color-convert/conversions';
 export class AppComponent {
   @ViewChild('canvas', { static: true })
   canvas: ElementRef<HTMLCanvasElement>;
-  title = 'mandelbrot-ng';
-  size = 800;
-  maxIterations = 100;
+  title: string = 'mandelbrot-ng';
+  size: number;
+  maxIterations: number = 100;
   hueStep: number = 36;
   hueOffset: number = 0;
 
@@ -25,12 +26,29 @@ export class AppComponent {
   private pixels: number[][];
 
   ngOnInit(): void {
-    this.ctx = this.canvas.nativeElement.getContext('2d');
-    this.px = new Pixel(this.ctx);
-    this.pixels = this.mandelbrot.generate(this.size, this.maxIterations);
+    this.reInit();
   }
 
-  clear() {
+  reInit(): void {
+    this.ctx = this.canvas.nativeElement.getContext('2d');
+    this.px = new Pixel(this.ctx);
+
+    console.time('gen');
+    console.log(
+      `Generating Mandelbrot set ${this.size} px square with ${this.maxIterations} max iterations`
+    );
+    this.pixels = this.mandelbrot.generate(this.size, this.maxIterations);
+    console.timeEnd('gen');
+  }
+
+  onResized(event: ResizedEvent): void {
+    this.size = event.newWidth - 16;
+    this.clear();
+    this.reInit();
+    this.drawImageBuffer();
+  }
+
+  clear(): void {
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
   }
 
@@ -61,6 +79,8 @@ export class AppComponent {
   }
 
   drawImageBuffer(): void {
+    // console.time('draw');
+
     // Get copy of actual imagedata (for the whole canvas area)
     const imageData = this.ctx.getImageData(0, 0, this.size, this.size);
     // Create a buffer that's the same size as our canvas image data
@@ -91,6 +111,8 @@ export class AppComponent {
     // Update imageData and put it to our drawing context
     imageData.data.set(buf8);
     this.ctx.putImageData(imageData, 0, 0);
+
+    // console.timeEnd('draw');
   }
 
   // TODO: move this to a Dict so we don't have to recalculate each time

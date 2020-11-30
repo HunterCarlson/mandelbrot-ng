@@ -10,6 +10,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 
+import { AngularResizedEventModule } from 'angular-resize-event';
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -19,6 +21,7 @@ import { MatSliderModule } from '@angular/material/slider';
     MatButtonModule,
     MatInputModule,
     MatSliderModule,
+    AngularResizedEventModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
