@@ -1,24 +1,11 @@
 <div class="main">
-  <div (resized)="onResized($event)">
+  <div>
     <canvas #canvas width="{{ size }}" height="{{ size }}"></canvas>
   </div>
   <div class="controls">
     <div class="buttons">
       <div>
-        <button mat-raised-button (click)="drawBlackAndWhite()">
-          Draw Black and White
-        </button>
-      </div>
-      <div>
-        <button mat-raised-button (click)="drawColor()">Draw Color</button>
-      </div>
-      <div>
-        <button mat-raised-button (click)="drawImageBuffer()">
-          Draw with Image Buffer
-        </button>
-      </div>
-      <div>
-        <button mat-raised-button (click)="clear()">Clear</button>
+        <button mat-raised-button (click)="draw()">Draw</button>
       </div>
     </div>
     <div class="hue">
@@ -31,7 +18,7 @@
             value="36"
             style="width: 400px; margin-right: 1em"
             [(ngModel)]="hueStep"
-            (change)="drawImageBuffer()"
+            (change)="draw()"
           ></mat-slider>
         </div>
         <div class="flex-baseline">
@@ -50,7 +37,7 @@
             value="0"
             style="width: 400px; margin-right: 1em"
             [(ngModel)]="hueOffset"
-            (change)="drawImageBuffer()"
+            (change)="draw()"
           ></mat-slider>
         </div>
         <div class="flex-baseline">

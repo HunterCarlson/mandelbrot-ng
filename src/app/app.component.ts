@@ -1,84 +1,72 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Mandelbrot } from './mandelbrot';
-import { Pixel } from './pixel';
 import * as convert from 'color-convert';
-import { rgb } from 'color-convert/route';
 import { RGB } from 'color-convert/conversions';
-import { ResizedEvent } from 'angular-resize-event';
+import { AppService } from './app.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
   @ViewChild('canvas', { static: true })
   canvas: ElementRef<HTMLCanvasElement>;
   title: string = 'mandelbrot-ng';
-  size: number;
+  size: number = 800;
   maxIterations: number = 100;
   hueStep: number = 36;
   hueOffset: number = 0;
 
   private mandelbrot = new Mandelbrot();
   private ctx: CanvasRenderingContext2D;
-  private px: Pixel;
   private pixels: number[][];
+  subscription: Subscription;
+
+  constructor(
+    private appService: AppService,
+    private _ref: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-    this.reInit();
+    this.subscription = this.appService.windowSizeChangedBS.subscribe(
+      (value) => {
+        // console.log('start subscription trigger');
+        this.size = value - 16;
+        this._ref.detectChanges();
+        this.reInit();
+        // console.log('end subscription trigger');
+      }
+    );
   }
 
   reInit(): void {
     this.ctx = this.canvas.nativeElement.getContext('2d');
-    this.px = new Pixel(this.ctx);
 
-    console.time('gen');
-    console.log(
-      `Generating Mandelbrot set ${this.size} px square with ${this.maxIterations} max iterations`
-    );
+    // console.time('gen');
+    // console.log(
+    //   `Generating Mandelbrot set ${this.size} px square with ${this.maxIterations} max iterations`
+    // );
     this.pixels = this.mandelbrot.generate(this.size, this.maxIterations);
-    console.timeEnd('gen');
+    // console.timeEnd('gen');
+
+    this.draw();
   }
 
-  onResized(event: ResizedEvent): void {
-    this.size = event.newWidth - 16;
-    this.clear();
-    this.reInit();
-    this.drawImageBuffer();
+  ngOnDestroy() {
+    this.subscription = null;
   }
 
-  clear(): void {
-    this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-  }
-
-  drawBlackAndWhite(): void {
-    for (let i = 0; i < this.size; i++) {
-      for (let j = 0; j < this.size; j++) {
-        if (this.pixels[i][j] < this.maxIterations) {
-          this.ctx.fillStyle = 'black';
-        } else {
-          this.ctx.fillStyle = 'white';
-        }
-        this.px.drawPixel(i, j);
-      }
-    }
-  }
-
-  drawColor(): void {
-    for (let i = 0; i < this.size; i++) {
-      for (let j = 0; j < this.size; j++) {
-        if (this.pixels[i][j] == this.maxIterations || this.pixels[i][j] == 0) {
-          this.ctx.fillStyle = 'black';
-        } else {
-          this.ctx.fillStyle = this.mapIterationToRgbHex(this.pixels[i][j]);
-        }
-        this.px.drawPixel(i, j);
-      }
-    }
-  }
-
-  drawImageBuffer(): void {
+  draw(): void {
+    // console.log('start drawImageBuffer');
     // console.time('draw');
 
     // Get copy of actual imagedata (for the whole canvas area)
@@ -113,6 +101,7 @@ export class AppComponent {
     this.ctx.putImageData(imageData, 0, 0);
 
     // console.timeEnd('draw');
+    // console.log('end drawImageBuffer');
   }
 
   // TODO: move this to a Dict so we don't have to recalculate each time
