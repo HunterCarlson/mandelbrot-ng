@@ -3,47 +3,50 @@
     <canvas #canvas width="{{ size }}" height="{{ size }}"></canvas>
   </div>
   <div class="controls">
-    <div class="buttons">
-      <div>
-        <button mat-raised-button (click)="draw()">Draw</button>
-      </div>
-    </div>
     <div class="hue">
-      <div class="hue-step">
-        <div class="flex-baseline">
+      <div class="slider-and-input">
+        <div class="slider-container">
           <mat-slider
             min="1"
             max="50"
             step="0.1"
             value="36"
-            style="width: 400px; margin-right: 1em"
-            [(ngModel)]="hueStep"
-            (change)="draw()"
+            (input)="hueStep = $event.value; draw()"
+            [value]="hueStep"
           ></mat-slider>
         </div>
         <div class="flex-baseline">
-          <mat-form-field style="width: 6em">
+          <mat-form-field>
             <mat-label>Hue Step</mat-label>
-            <input matInput type="number" [(ngModel)]="hueStep" />
+            <input
+              matInput
+              type="number"
+              [(ngModel)]="hueStep"
+              (change)="draw()"
+            />
           </mat-form-field>
         </div>
       </div>
-      <div class="hue-offset">
-        <div class="flex-baseline">
+      <div class="slider-and-input">
+        <div class="slider-container">
           <mat-slider
             min="0"
             max="360"
             step="1"
             value="0"
-            style="width: 400px; margin-right: 1em"
-            [(ngModel)]="hueOffset"
-            (change)="draw()"
+            (input)="hueOffset = $event.value; draw()"
+            [value]="hueOffset"
           ></mat-slider>
         </div>
         <div class="flex-baseline">
-          <mat-form-field style="width: 6em">
+          <mat-form-field>
             <mat-label>Hue Offset</mat-label>
-            <input matInput type="number" [(ngModel)]="hueOffset" />
+            <input
+              matInput
+              type="number"
+              [(ngModel)]="hueOffset"
+              (change)="draw()"
+            />
           </mat-form-field>
         </div>
       </div>
