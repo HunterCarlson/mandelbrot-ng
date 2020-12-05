@@ -1,27 +1,19 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Mandelbrot } from './mandelbrot';
 import * as convert from 'color-convert';
 import { RGB } from 'color-convert/conversions';
-import { AppService } from './app.service';
-import { Subscription } from 'rxjs';
+import { ResizedEvent } from 'angular-resize-event';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent {
   @ViewChild('canvas', { static: true })
   canvas: ElementRef<HTMLCanvasElement>;
   title: string = 'mandelbrot-ng';
-  size: number = 800;
+  size: number;
   maxIterations: number = 100;
   hueStep: number = 36;
   hueOffset: number = 0;
@@ -29,23 +21,16 @@ export class AppComponent implements OnInit, OnDestroy {
   private mandelbrot = new Mandelbrot();
   private ctx: CanvasRenderingContext2D;
   private pixels: number[][];
-  subscription: Subscription;
 
-  constructor(
-    private appService: AppService,
-    private _ref: ChangeDetectorRef
-  ) {}
+  constructor() {
+    this.size = window.innerWidth - 16;
+    // console.log(`Canvas init to ${this.size}px`);
+  }
 
-  ngOnInit(): void {
-    this.subscription = this.appService.windowSizeChangedBS.subscribe(
-      (value) => {
-        // console.log('start subscription trigger');
-        this.size = value - 16;
-        this._ref.detectChanges();
-        this.reInit();
-        // console.log('end subscription trigger');
-      }
-    );
+  onResized(event: ResizedEvent): void {
+    this.size = event.newWidth - 16;
+    // console.log(`Canvas resized to ${this.size}px`);
+    this.reInit();
   }
 
   reInit(): void {
@@ -59,10 +44,6 @@ export class AppComponent implements OnInit, OnDestroy {
     // console.timeEnd('gen');
 
     this.draw();
-  }
-
-  ngOnDestroy() {
-    this.subscription = null;
   }
 
   draw(): void {
@@ -105,12 +86,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   // TODO: move this to a Dict so we don't have to recalculate each time
-  mapIterationToRgbHex(i: number): string {
-    const hue = this.hueStep * (i - 1) + this.hueOffset;
-    const colorHex = convert.hsl.hex([hue % 360, 100, 50]);
-    return `#${colorHex}`;
-  }
-
   mapIterationToRgb(i: number): RGB {
     const hue = this.hueStep * (i - 1) + this.hueOffset;
     const colorRgb = convert.hsl.rgb([hue % 360, 100, 50]);

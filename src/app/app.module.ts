@@ -23,12 +23,7 @@ import { AngularResizedEventModule } from 'angular-resize-event';
     MatSliderModule,
     AngularResizedEventModule,
   ],
-  providers: [
-    {
-      provide: 'windowObject',
-      useValue: window,
-    },
-  ],
+  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
