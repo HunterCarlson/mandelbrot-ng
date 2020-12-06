@@ -1,12 +1,13 @@
 import * as math from 'mathjs';
 import { Complex } from 'mathjs';
 
+const maxR = 2;
+
 export class Mandelbrot {
   minX = -2;
   maxX = 2;
   minY = -2;
   maxY = 2;
-  maxR = 2;
 
   numericWidth = this.maxX - this.minX;
   numericHeight = this.maxY - this.minY;
@@ -37,7 +38,7 @@ export class Mandelbrot {
     while (iterations < maxIterations) {
       let z2 = math.add(math.square(z), c) as Complex;
       const r = z2.toPolar().r;
-      if (r > this.maxR) {
+      if (r > maxR) {
         break;
       }
       z = z2;

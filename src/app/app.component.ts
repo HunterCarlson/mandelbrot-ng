@@ -15,7 +15,7 @@ export class AppComponent {
   title: string = 'mandelbrot-ng';
   size: number;
   maxIterations: number = 100;
-  hueStep: number = 36;
+  hueStep: number = 10;
   hueOffset: number = 0;
 
   private mandelbrot = new Mandelbrot();
@@ -90,5 +90,18 @@ export class AppComponent {
     const hue = this.hueStep * (i - 1) + this.hueOffset;
     const colorRgb = convert.hsl.rgb([hue % 360, 100, 50]);
     return colorRgb;
+  }
+
+  onClickCanvas(event: { clientX: number; clientY: number }) {
+    let rect = this.canvas.nativeElement.getBoundingClientRect();
+    let x = event.clientX - rect.left;
+    let y = event.clientY - rect.top;
+    console.log(`Clicked ${x}, ${y}`);
+    this.zoom(x, y);
+  }
+
+  zoom(x: number, y: number): void {
+    this.ctx.fillStyle = '#FFFFFF';
+    this.ctx.fillRect(x, y, 8, 8);
   }
 }

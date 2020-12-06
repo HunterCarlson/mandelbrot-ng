@@ -1,6 +1,11 @@
 <div class="main" (resized)="onResized($event)">
   <div>
-    <canvas #canvas width="{{ size }}" height="{{ size }}"></canvas>
+    <canvas
+      #canvas
+      width="{{ size }}"
+      height="{{ size }}"
+      (click)="onClickCanvas($event)"
+    ></canvas>
   </div>
   <div class="controls">
     <div class="hue">
@@ -10,7 +15,7 @@
             min="1"
             max="50"
             step="0.1"
-            value="36"
+            value="10"
             (input)="hueStep = $event.value; draw()"
             [value]="hueStep"
           ></mat-slider>
