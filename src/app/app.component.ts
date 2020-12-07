@@ -12,6 +12,11 @@ import { ResizedEvent } from 'angular-resize-event';
 export class AppComponent {
   @ViewChild('canvas', { static: true })
   canvas: ElementRef<HTMLCanvasElement>;
+
+  @ViewChild('audioPlayer')
+  audioPlayer: ElementRef<HTMLAudioElement>;
+  audioIsPlaying: boolean = false;
+
   title: string = 'mandelbrot-ng';
   size: number;
   maxIterations: number = 100;
@@ -90,5 +95,19 @@ export class AppComponent {
     const hue = this.hueStep * (i - 1) + this.hueOffset;
     const colorRgb = convert.hsl.rgb([hue % 360, 100, 50]);
     return colorRgb;
+  }
+
+  toggleAudio(): void {
+    if (this.audioIsPlaying) {
+      this.audioPlayer.nativeElement.pause();
+      this.audioPlayer.nativeElement.currentTime = 0;
+    } else {
+      this.audioPlayer.nativeElement.play();
+    }
+    this.audioIsPlaying = !this.audioIsPlaying;
+  }
+
+  onAudioEnded() {
+    this.audioIsPlaying = false;
   }
 }

@@ -51,5 +51,14 @@
         </div>
       </div>
     </div>
+    <div class="music">
+      <audio #audioPlayer (ended)="onAudioEnded()" preload="auto">
+        <source src="../assets/05MandelbrotSet.mp3" type="audio/mp3" />
+      </audio>
+      <button mat-fab (click)="toggleAudio()">
+        <mat-icon *ngIf="!audioIsPlaying">volume_up</mat-icon>
+        <mat-icon *ngIf="audioIsPlaying">volume_off</mat-icon>
+      </button>
+    </div>
   </div>
 </div>
