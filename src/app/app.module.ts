@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatIconModule } from '@angular/material/icon';
 
 import { AngularResizedEventModule } from 'angular-resize-event';
 
@@ -21,6 +22,7 @@ import { AngularResizedEventModule } from 'angular-resize-event';
     MatButtonModule,
     MatInputModule,
     MatSliderModule,
+    MatIconModule,
     AngularResizedEventModule,
   ],
   providers: [],

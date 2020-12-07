@@ -19,7 +19,7 @@ canvas {
 
 .hue {
   @extend %flex-col;
-  width: 100%;
+  width: 90%;
 }
 
 .slider-and-input {
@@ -46,4 +46,9 @@ canvas {
   mat-form-field {
     width: 4em;
   }
+}
+
+.music {
+  @extend %flex-col;
+  justify-content: center;
 }
